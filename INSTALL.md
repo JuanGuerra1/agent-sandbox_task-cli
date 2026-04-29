@@ -25,55 +25,77 @@ Antes de empezar, verificar en Antigravity:
 
 ## Instalación de Spec Kit oficial
 
-**[gap]** Verificar comando exacto en docs oficiales antes de ejecutar:
+**[hecho]** Comando verificado 2026-04-29 — gap cerrado:
 
-- https://github.com/github/spec-kit
-- https://codelabs.developers.google.com/codelabs/getting-started-with-spec-driven-development-in-antigravity
+```powershell
+# Requiere: Python 3.11+ y uv instalado
+# Ejecutar desde cualquier directorio (NO desde dentro del target)
 
-Comandos candidatos (el correcto depende de versión de Spec Kit a abril 2026):
+$env:PYTHONIOENCODING = "utf-8"
+$env:PYTHONUTF8 = "1"
+uvx --from git+https://github.com/github/spec-kit.git specify init <NOMBRE-O-PATH-DESTINO> --integration agy --force
 
-```bash
-# Opción A — vía uvx (Python)
-uvx spec-kit init --agent agy
-
-# Opción B — vía npm
-npx @github/spec-kit init --agent agy
-
-# Opción C — clonar + setup local
-git clone https://github.com/github/spec-kit.git temp-speckit
-cd temp-speckit
-./scripts/install-agy.sh
+# Ejemplo para inicializar en directorio ya existente:
+uvx --from git+https://github.com/github/spec-kit.git specify init "C:\Users\Personal\Documents\agent-sandbox_task-cli" --integration agy --force
 ```
 
-Tras instalación exitosa, debe existir:
+> **Nota encoding:** `PYTHONIOENCODING=utf-8` es obligatorio en Windows — sin él el instalador falla con UnicodeEncodeError en cp1252.
+
+> **Nota `--force`:** necesario si el directorio ya existe (con archivos). Sin `--force`, el instalador aborta.
+
+> **Nota integración:** el flag correcto es `--integration agy` (no `--agent agy`). El instalador escoge automáticamente PowerShell como tipo de scripts en Windows.
+
+Tras instalación exitosa, la estructura real creada es:
 
 ```
-task-cli-sandbox/
+agent-sandbox_task-cli/
+├── AGENTS.md                          ← plantilla de la Agencia (copiada antes)
+├── INSTALL.md                         ← este archivo
+├── README.md                          ← plantilla de la Agencia
+├── .antigravityignore                 ← plantilla de la Agencia
 ├── .agents/
-│   └── workflows/
-│       ├── speckit.constitution.yml (o .md)
-│       ├── speckit.specify.yml
-│       ├── speckit.clarify.yml
-│       ├── speckit.plan.yml
-│       ├── speckit.tasks.yml
-│       ├── speckit.analyze.yml
-│       ├── speckit.implement.yml
-│       └── speckit.checklist.yml
+│   └── skills/
+│       ├── speckit-constitution/SKILL.md
+│       ├── speckit-specify/SKILL.md
+│       ├── speckit-clarify/SKILL.md
+│       ├── speckit-plan/SKILL.md
+│       ├── speckit-tasks/SKILL.md
+│       ├── speckit-analyze/SKILL.md
+│       ├── speckit-implement/SKILL.md
+│       ├── speckit-checklist/SKILL.md
+│       ├── speckit-taskstoissues/SKILL.md
+│       ├── speckit-git-commit/SKILL.md
+│       ├── speckit-git-feature/SKILL.md
+│       ├── speckit-git-initialize/SKILL.md
+│       ├── speckit-git-remote/SKILL.md
+│       └── speckit-git-validate/SKILL.md
 └── .specify/
-    └── memory/
-        └── constitution.md (vacío hasta /speckit.constitution)
+    ├── memory/constitution.md         ← vacío hasta @speckit-constitution
+    ├── templates/
+    │   ├── constitution-template.md
+    │   ├── spec-template.md
+    │   ├── plan-template.md
+    │   ├── tasks-template.md
+    │   └── checklist-template.md
+    ├── extensions/git/                ← scripts PowerShell + bash para git
+    ├── integrations/agy.manifest.json
+    └── workflows/speckit/workflow.yml
 ```
+
+> **Diferencia vs T-85 (agent-sandbox):** Antigravity usa **skills** (`@speckit-*` invocables en chat) en lugar de slash commands (`/speckit.*`). La invocación en el TUI es distinta — ver §"Verificación de comandos" abajo.
 
 ## Verificación de comandos Spec Kit en Antigravity
 
-Una vez instalado:
+Una vez instalado e iniciado el workspace en Antigravity:
 
-1. Abrir Antigravity con el workspace `task-cli-sandbox`
-2. En el TUI, escribir `/` y verificar autocomplete
-3. Debe aparecer: `/speckit.constitution`, `/speckit.specify`, `/speckit.clarify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.analyze`, `/speckit.implement`, `/speckit.checklist`
-4. Adicional: skills `@speckit.*` invocables directamente
+1. Abrir Antigravity → **File → Open Folder** → seleccionar `agent-sandbox_task-cli`
+2. En el chat, escribir `@` y verificar autocomplete
+3. Debe aparecer la lista de skills: `@speckit-constitution`, `@speckit-specify`, `@speckit-clarify`, `@speckit-plan`, `@speckit-tasks`, `@speckit-analyze`, `@speckit-implement`, `@speckit-checklist`
+4. **Modelo recomendado por fase** → ver `cerebro-digital-spec/Referencias/baseline-modelos-google.md`
 
-Si no aparecen → revisar `.agents/workflows/` y reinstalar Spec Kit.
+> **Diferencia importante vs agent-sandbox:** en Antigravity las skills se invocan con `@` (no con `/`). El TUI de opencode usaba `/speckit.*` — Antigravity usa `@speckit-*`.
+
+Si no aparecen en autocomplete → revisar que `.agents/skills/` contiene los directorios correctos y reiniciar Antigravity.
 
 ## Gemini CLI en M1
 
