@@ -1,0 +1,60 @@
+# .antigravityignore — task-cli sandbox
+# Excluye archivos del indexing automático de Antigravity para ahorrar tokens.
+# Referencia: https://antigravity.codes/es/blog/antigravity-save-tokens-reduce-quota
+
+# Dependencias y builds
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Git interno
+.git/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores e IDEs (excluir configuración local de otros editores)
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# Logs y temporales
+*.log
+*.tmp
+tmp/
+logs/
+
+# Binarios y archivos pesados
+*.zip
+*.tar.gz
+*.7z
+*.exe
+*.dll
+*.so
+*.dylib
+*.bin
+
+# Outputs de testing
+coverage/
+.coverage
+htmlcov/
+*.cover
+
+# Documentación generada
+docs/_build/
+site/
+
+# Spec Kit — NO excluir .agents/workflows/ ni .specify/ (los necesita)
+# Pero sí excluir si genera caches
+.specify/_cache/
+.agents/_cache/
