@@ -91,5 +91,6 @@ Al cerrar task-cli (PR mergeado por Juan):
 
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
+shell commands, and other important information, read the current plan:
+C:\Users\Personal\Documents\agent-sandbox_task-cli\specs\001-task-cli-python\plan.md
 <!-- SPECKIT END -->
